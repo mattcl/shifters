@@ -1,7 +1,7 @@
 use std::{fs::DirEntry, path::PathBuf};
 
 use anyhow::{anyhow, bail, Context, Result};
-use async_std::fs::rename;
+use async_std::fs::{copy, remove_file};
 use clap::Parser;
 use dirs::home_dir;
 use filetime::FileTime;
@@ -96,9 +96,15 @@ impl Cli {
                 from.to_string_lossy(),
                 to.to_string_lossy()
             );
-            Ok(rename(&from, to)
+            copy(&from, to)
                 .await
-                .with_context(|| format!("failed to move {}", &from.to_string_lossy()))?)
+                .with_context(|| format!("failed to copy {}", &from.to_string_lossy()))?;
+
+            remove_file(&from)
+                .await
+                .with_context(|| format!("failed to remove {}", &from.to_string_lossy()))?;
+
+            Ok(())
         } else {
             println!(
                 "would move '{}' to '{}' but --execute not set",
