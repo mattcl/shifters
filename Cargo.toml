@@ -1,0 +1,25 @@
+[package]
+name = "shifters"
+version = "0.1.0"
+authors = ["Matt Chun-Lum <matt@questionable.engineering>"]
+edition = "2021"
+description = "Move files from one set of directories to another"
+rust-version = "1.64.0"
+
+[profile.release]
+lto = true
+
+[dependencies]
+anyhow = "1"
+async-std = "1.12.0"
+clap = { version = "4.3", features = ["cargo", "derive", "env"] }
+dirs = "5.0.1"
+figment = { version = "0.10.10", features = ["env", "toml"] }
+filetime = "0.2.21"
+futures = "0.3"
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+
+[dev-dependencies]
+assert_cmd = "2"
+assert_fs = "1"

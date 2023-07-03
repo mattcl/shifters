@@ -1,0 +1,10 @@
+resources:
+  - name: shifters
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/mattcl/shifters.git
+      ignore_paths:
+        - 'README.md'
+
+

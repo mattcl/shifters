@@ -1,0 +1,11 @@
+[global]
+min_age_seconds = 500
+
+[paths.foo]
+path = "/bar/foo"
+dest = "/foo/bar"
+min_age_seconds = 10
+
+[paths.bar]
+path = "/other/bar"
+dest = "/other/foo"
