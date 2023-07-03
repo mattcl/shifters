@@ -17,3 +17,4 @@ run:
     - "-c"
     - |
       cat repo/Cargo.toml | grep version | head -1 | cut -d '"' -f 2 > version/version
+      cat version/version
