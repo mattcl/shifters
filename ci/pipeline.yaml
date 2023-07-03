@@ -56,6 +56,10 @@ jobs:
   - name: deploy
     plan:
       - in_parallel:
+        - get: shifters
+          trigger: false
+          passed:
+            - publish-image
         - get: gitops
           trigger: false
         - get: docker-image
