@@ -90,25 +90,25 @@ impl Cli {
     }
 
     async fn shift_file(&self, from: PathBuf, to: PathBuf) -> Result<()> {
+        let f_str = from.to_string_lossy();
+
         if self.execute {
-            println!(
-                "moving '{}' to '{}'",
-                from.to_string_lossy(),
-                to.to_string_lossy()
-            );
+            println!("moving '{}' to '{}'", f_str, to.to_string_lossy());
             copy(&from, to)
                 .await
-                .with_context(|| format!("failed to copy {}", &from.to_string_lossy()))?;
+                .with_context(|| format!("failed to copy {}", f_str))?;
 
             remove_file(&from)
                 .await
-                .with_context(|| format!("failed to remove {}", &from.to_string_lossy()))?;
+                .with_context(|| format!("failed to remove {}", f_str))?;
+
+            println!("finished processing '{}'", f_str);
 
             Ok(())
         } else {
             println!(
                 "would move '{}' to '{}' but --execute not set",
-                from.to_string_lossy(),
+                f_str,
                 to.to_string_lossy()
             );
             Ok(())
