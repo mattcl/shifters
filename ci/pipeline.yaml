@@ -9,21 +9,13 @@ resources:
       ignore_paths:
         - 'README.md'
 
-  # - name: gitops
-  #   type: git
-  #   icon: github
-  #   source:
-  #     uri: git@github.com:mattcl/hl-shifters
-  #     branch: master
-  #     private_key: ((gitops.deploy-key))
-
-  # - name: gitops-write
-  #   type: git
-  #   icon: github
-  #   source:
-  #     uri: git@github.com:mattcl/hl-shifters
-  #     branch: master
-  #     private_key: ((gitops.deploy-key))
+  - name: gitops
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:mattcl/hl-shifters
+      branch: master
+      private_key: ((gitops.deploy-key))
 
   - name: docker-image
     type: registry-image
@@ -60,3 +52,20 @@ jobs:
         params:
           image: image/image.tar
           additional_tags: version/version
+
+  - name: deploy
+    plan:
+      - in_parallel:
+        - get: gitops
+          trigger: false
+        - get: docker-image
+          trigger: true
+          passed:
+            - publish-image
+          params:
+            skip_download: true
+      - task: update-tag
+        file: shifters/ci/update-kustomize-tag.yaml
+      - put: gitops
+        params:
+          repository: gitops

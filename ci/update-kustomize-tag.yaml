@@ -1,0 +1,32 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: bitnami/git
+    tag: latest
+
+inputs:
+  - name: gitops
+  - name: docker-image
+
+run:
+  dir: gitops
+  path: /bin/sh
+  args:
+    - "-c"
+    - |
+      set -ex
+      cd installs/default
+      export UPDATE_TAG=$(cat ../docker-image/tag)
+      ./update-tag.sh $UPDATE_TAG
+      cd ../../
+
+      git config --global user.name = "papercode ci"
+      git config --global user.email = "matt@questionable.engineering"
+      git add install/default/kustomization.yaml
+
+      if [ -z "$(git status --porcelain)" ]; then
+        echo "Working directory clean"
+      else
+        git commit -a -m "feat: Automated image update to ${UPDATE_TAG}"
+      fi
