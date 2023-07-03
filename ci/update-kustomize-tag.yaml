@@ -9,6 +9,9 @@ inputs:
   - name: gitops
   - name: docker-image
 
+outputs:
+  - name: gitops
+
 run:
   dir: gitops
   path: /bin/sh
