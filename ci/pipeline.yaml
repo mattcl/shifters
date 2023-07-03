@@ -3,8 +3,60 @@ resources:
     type: git
     icon: github
     source:
-      uri: https://github.com/mattcl/shifters.git
+      uri: git@github.com:mattcl/shifters
+      branch: master
+      private_key: ((shifters.deploy-key))
       ignore_paths:
         - 'README.md'
 
+  # - name: gitops
+  #   type: git
+  #   icon: github
+  #   source:
+  #     uri: git@github.com:mattcl/hl-shifters
+  #     branch: master
+  #     private_key: ((gitops.deploy-key))
 
+  # - name: gitops-write
+  #   type: git
+  #   icon: github
+  #   source:
+  #     uri: git@github.com:mattcl/hl-shifters
+  #     branch: master
+  #     private_key: ((gitops.deploy-key))
+
+  - name: docker-image
+    type: registry-image
+    icon: docker
+    source:
+      repository: ((image-repo.name))/shifters
+      username: ((image-repo.user))
+      password: ((image-repo.token))
+
+jobs:
+  - name: test
+    plan:
+      - get: shifters
+        trigger: true
+      - task: test
+        file: shifters/ci/test.yaml
+        input_mapping:
+          repo: shifters
+
+  - name: publish-image
+    plan:
+      - get: shifters
+        trigger: true
+        passed:
+          - test
+      - task: test
+        file: shifters/ci/test.yaml
+        input_mapping:
+          repo: shifters
+      - task: build-image
+        privileged: true
+        file: shifters/ci/publish.yaml
+      - put: docker-image
+        params:
+          image: image/image.tar
+          additional_tags: version/version
