@@ -16,14 +16,14 @@ run:
     - "-c"
     - |
       set -ex
-      cd installs/default
       export UPDATE_TAG=$(cat ../docker-image/tag)
+      cd installs/default
       ./update-tag.sh $UPDATE_TAG
       cd ../../
 
       git config --global user.name = "papercode ci"
       git config --global user.email = "matt@questionable.engineering"
-      git add install/default/kustomization.yaml
+      git add installs/default/kustomization.yaml
 
       if [ -z "$(git status --porcelain)" ]; then
         echo "Working directory clean"
