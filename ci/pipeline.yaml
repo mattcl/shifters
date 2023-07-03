@@ -49,8 +49,8 @@ jobs:
         trigger: true
         passed:
           - test
-      - task: test
-        file: shifters/ci/test.yaml
+      - task: extract-version
+        file: shifters/ci/extract-version.yaml
         input_mapping:
           repo: shifters
       - task: build-image
