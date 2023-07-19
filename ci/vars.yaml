@@ -1,0 +1,11 @@
+service:
+  name: shifters
+  repo:
+    uri: https://github.com/mattcl/shifters.git
+  image-repo: mattcl/shifters
+  image-repo-api: https://hub.docker.com/v2/repositories/mattcl/shifters
+
+gitops:
+  repo:
+    uri: git@github.com:mattcl/hl-shifters
+  overlay: installs/default

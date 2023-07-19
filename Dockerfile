@@ -1,10 +1,12 @@
-FROM rust:1.70-slim as builder
+FROM rust:1.70-alpine as builder
+
+RUN apk add musl-dev
+
 WORKDIR /usr/src/shifters
 COPY . .
 
-RUN cargo install --path .
+RUN cargo install --locked --target-dir /target --path .
 
-FROM debian:bullseye-slim
-RUN apt-get update && rm -rf /var/lib/apt/lists/*
+FROM alpine:3.18
 COPY --from=builder /usr/local/cargo/bin/shifters /usr/local/bin/shifters
 CMD ["shifters"]
