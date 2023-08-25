@@ -4,7 +4,7 @@ version = "0.2.4"
 authors = ["Matt Chun-Lum <matt@questionable.engineering>"]
 edition = "2021"
 description = "Move files from one set of directories to another"
-rust-version = "1.66.1"
+rust-version = "1.70.0"
 license = "MIT"
 
 [profile.release]
