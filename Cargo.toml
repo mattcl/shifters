@@ -1,10 +1,10 @@
 [package]
 name = "shifters"
-version = "0.2.6"
+version = "0.2.7"
 authors = ["Matt Chun-Lum <matt@questionable.engineering>"]
 edition = "2021"
 description = "Move files from one set of directories to another"
-rust-version = "1.70.0"
+rust-version = "1.74"
 license = "MIT"
 
 [profile.release]
